@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вадик Пидорас - Официальный Сайт</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: #ffebee;
+        }
+        
+        .pidor-bg {
+            background: linear-gradient(135deg, #ff1744 0%, #f50057 100%);
+        }
+        
+        .game-container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            border: 4px dashed #d50000;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #ffcdd2;
+        }
+        
+        #gameCanvas {
+            background-color: #ffebee;
+        }
+        
+        .game-controls {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .pidor-card:hover {
+            transform: rotate(5deg) scale(1.05);
+            box-shadow: 0 20px 25px -5px rgba(244, 67, 54, 0.3);
+        }
+        
+        @keyframes pidorSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .pidor-spin {
+            animation: pidorSpin 2s linear infinite;
+        }
+        
+        @keyframes floatPidor {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .pidor-float {
+            animation: floatPidor 3s ease-in-out infinite;
+        }
+        
+        .pidor-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #d50000;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full z-10">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-red-600">ВадикПидорас™</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#facts" class="text-gray-700 hover:text-red-600 transition">Факты</a>
+                    <a href="#evidence" class="text-gray-700 hover:text-red-600 transition">Доказательства</a>
+                    <a href="#game" class="text-gray-700 hover:text-red-600 transition">Игра</a>
+                    <a href="#testimony" class="text-gray-700 hover:text-red-600 transition">Отзывы</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="menu-btn" class="text-gray-700">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#facts" class="block px-3 py-2 text-gray-700 hover:text-red-600">Факты</a>
+                <a href="#evidence" class="block px-3 py-2 text-gray-700 hover:text-red-600">Доказательства</a>
+                <a href="#game" class="block px-3 py-2 text-gray-700 hover:text-red-600">Игра</a>
+                <a href="#testimony" class="block px-3 py-2 text-gray-700 hover:text-red-600">Отзывы</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-24 pb-16 md:pt-32 md:pb-24 pidor-bg text-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4">ВАДИК <span class="underline decoration-wavy">ПИДОРАС</span></h1>
+                    <h2 class="text-2xl md:text-3xl font-semibold mb-6">Научно доказанный факт с 1993 года</h2>
+                    <p class="text-lg mb-8 opacity-90">После десятилетий тщательных исследований, множества научных работ и бесчисленных свидетельств очевидцев, научное сообщество пришло к единодушному выводу: Вадик действительно пидорас.</p>
+                    <div class="flex space-x-4">
+                        <a href="#evidence" class="px-6 py-3 bg-white text-red-600 rounded-lg font-bold hover:bg-gray-100 transition">
+                            <i class="fas fa-gavel mr-2"></i>Доказательства
+                        </a>
+                        <a href="#game" class="px-6 py-3 border-2 border-white text-white rounded-lg font-bold hover:bg-white hover:text-red-600 transition">
+                            <i class="fas fa-gamepad mr-2"></i>Играть
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="relative pidor-float">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4128/4128176.png" alt="Pidor Icon" class="w-64 h-64 pidor-spin">
+                        <div class="pidor-badge">100%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Facts Section -->
+    <section id="facts" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Неопровержимые факты о Вадике</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Fact 1 -->
+                <div class="pidor-card bg-red-50 p-6 rounded-xl border-2 border-red-200 transition duration-300">
+                    <div class="text-red-500 text-4xl mb-4">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-red-600">Научно доказано</h3>
+                    <p class="text-gray-700">25-летнее исследование, опубликованное в Nature, подтвердило пидорасистость Вадика с доверительным интервалом 99.9% (p < .001).</p>
+                </div>
+                
+                <!-- Fact 2 -->
+                <div class="pidor-card bg-red-50 p-6 rounded-xl border-2 border-red-200 transition duration-300">
+                    <div class="text-red-500 text-4xl mb-4">
+                        <i class="fas fa-globe-europe"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-red-600">Международное признание</h3>
+                    <p class="text-gray-700">Резолюция ООН 69420 официально признаёт Вадика пидорасом во всех 193 странах-участницах.</p>
+                </div>
+                
+                <!-- Fact 3 -->
+                <div class="pidor-card bg-red-50 p-6 rounded-xl border-2 border-red-200 transition duration-300">
+                    <div class="text-red-500 text-4xl mb-4">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-red-600">Исторический контекст</h3>
+                    <p class="text-gray-700">Расшифрованные древние манускрипты показывают, что даже неолитические люди называли Вадика "тот пидорас из третьей пещеры".</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Evidence Section -->
+    <section id="evidence" class="py-16 bg-red-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12 text-red-600">Неопровержимые доказательства</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Evidence 1 -->
+                <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                    <div class="text-5xl text-red-500 mb-3">
+                        <i class="fas fa-user-secret"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Секретные документы</h3>
+                    <p class="text-gray-600 text-sm">Рассекреченные файлы КГБ подтверждают пидорасистую деятельность Вадика с детства.</p>
+                </div>
+                
+                <!-- Evidence 2 -->
+                <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                    <div class="text-5xl text-red-500 mb-3">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Видео доказательства</h3>
+                    <p class="text-gray-600 text-sm">Камеры наблюдения зафиксировали подозрительно пидорасистое поведение Вадика в 2007 году.</p>
+                </div>
+                
+                <!-- Evidence 3 -->
+                <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                    <div class="text-5xl text-red-500 mb-3">
+                        <i class="fas fa-dna"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Анализ ДНК</h3>
+                    <p class="text-gray-600 text-sm">Результаты 23andMe показывают 98% совпадение с известными генетическими маркерами пидорасистости.</p>
+                </div>
+                
+                <!-- Evidence 4 -->
+                <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                    <div class="text-5xl text-red-500 mb-3">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Сканирование мозга</h3>
+                    <p class="text-gray-600 text-sm">fMRI выявляет характерные для пидорасов нейронные паттерны при демонстрации фотографий Вадика.</p>
+                </div>
+            </div>
+            
+            <div class="mt-12 bg-white p-6 rounded-xl border-2 border-red-300">
+                <h3 class="text-xl font-bold text-center mb-4 text-red-600">Официальный сертификат пидорасистости</h3>
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/3 mb-6 md:mb-0 flex justify-center">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3447/3447706.png" alt="Certificate" class="w-48 h-48">
+                    </div>
+                    <div class="md:w-2/3 md:pl-8">
+                        <p class="text-gray-700 mb-4">Настоящим удостоверяется, что Вадик успешно выполнил все требования для официального признания пидорасом, включая:</p>
+                        <ul class="list-disc pl-5 text-gray-700 space-y-2">
+                            <li>Пидорасистое поведение в общественных местах</li>
+                            <li>Сомнительный выбор одежды</li>
+                            <li>Необычные паттерны смеха</li>
+                            <li>Чрезмерное использование геля для волос</li>
+                            <li>Общую вадикоподобность</li>
+                        </ul>
+                        <div class="mt-6 flex items-center justify-center md:justify-start">
+                            <div class="border-t-2 border-red-300 pt-4 w-full max-w-xs">
+                                <p class="text-center md:text-left font-bold text-red-600">Международный совет по сертификации пидорасов</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Section -->
+    <section id="game" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Игра "Поймай пидораса"</h2>
+            <p class="text-lg text-center text-gray-600 mb-12">Помоги собрать доказательства пидорасистости Вадика!</p>
+            
+            <div class="flex flex-col items-center">
+                <div class="game-container mb-6">
+                    <canvas id="gameCanvas" width="300" height="400"></canvas>
+                    <div class="game-controls">
+                        <button id="leftBtn" class="px-4 py-2 bg-red-600 text-white rounded-lg font-bold">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <button id="rightBtn" class="px-4 py-2 bg-red-600 text-white rounded-lg font-bold">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="text-center max-w-2xl">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Как играть</h3>
+                    <p class="text-gray-600 mb-6">
+                        Используй кнопки или стрелки на клавиатуре, чтобы двигать детектива. Собирай падающие доказательства, избегая попыток Вадика отвлечь тебя своей пидорасистостью. 
+                        Каждое собранное доказательство приближает нас к неопровержимым уликам!
+                    </p>
+                    <div class="flex justify-center gap-4">
+                        <div class="bg-red-50 px-4 py-2 rounded-lg border border-red-200">
+                            <span class="text-red-600 font-bold">Доказательства:</span>
+                            <span id="score" class="ml-2 font-bold">0</span>
+                        </div>
+                        <div class="bg-red-50 px-4 py-2 rounded-lg border border-red-200">
+                            <span class="text-red-600 font-bold">Рекорд:</span>
+                            <span id="highScore" class="ml-2 font-bold">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimony" class="py-16 bg-red-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12 text-red-600">Свидетельства очевидцев</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Person" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold">Доктор Иван Петров</h4>
+                            <p class="text-sm text-gray-500">Пидоролог, МГУ</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic">"За 20 лет изучения пидорасистого поведения я не встречал более классического экземпляра, чем Вадик. Он - платонический идеал пидораса."</p>
+                    <div class="mt-4 flex">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Person" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold">Мария Сидорова</h4>
+                            <p class="text-sm text-gray-500">Соседка Вадика</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic">"Однажды Вадик взял мою газонокосилку и вернул её с отполированной ручкой, но тупыми лезвиями. Классический пидорасистый поступок."</p>
+                    <div class="mt-4 flex">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star-half-alt text-yellow-400"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Person" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold">Сергей Кузнецов</h4>
+                            <p class="text-sm text-gray-500">Одноклассник</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic">"В третьем классе Вадик ел клей и обвинил в этом меня. Тогда я впервые заподозрил, что он пидорас. С тех пор доказательств только прибавилось."</p>
+                    <div class="mt-4 flex">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <span class="text-xl font-bold text-red-400">ВадикПидорас™</span>
+                    <p class="text-gray-400 mt-2">Официальный исследовательский институт с 1993 года</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-vk"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-telegram"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-odnoklassniki"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+                <p>Дисклеймер: Этот сайт создан в развлекательных целях. Любые совпадения с реальными Вадиками, живыми или пидорасами, являются чистой случайностью.</p>
+                <p class="mt-2">&copy; 2023 Международный консорциум по исследованию пидорасистости Вадиков. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        // Game logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('gameCanvas');
+            const ctx = canvas.getContext('2d');
+            const scoreElement = document.getElementById('score');
+            const highScoreElement = document.getElementById('highScore');
+            const leftBtn = document.getElementById('leftBtn');
+            const rightBtn = document.getElementById('rightBtn');
+            
+            // Game variables
+            let score = 0;
+            let highScore = localStorage.getItem('highScore') || 0;
+            let gameOver = false;
+            let animationId;
+            
+            // Player (detective)
+            const player = {
+                x: canvas.width / 2 - 25,
+                y: canvas.height - 60,
+                width: 50,
+                height: 60,
+                speed: 8,
+                dx: 0
+            };
+            
+            // Evidence items
+            let evidence = [];
+            const evidenceSettings = {
+                width: 30,
+                height: 30,
+                speed: 3,
+                spawnRate: 60
+            };
+            
+            // Vadik distractions
+            let vadiks = [];
+            const vadikSettings = {
+                width: 40,
+                height: 50,
+                speed: 4,
+                spawnRate: 120
+            };
+            
+            let frameCount = 0;
+            
+            // Draw player (detective)
+            function drawPlayer() {
+                // Body
+                ctx.fillStyle = '#3f51b5';
+                ctx.fillRect(player.x, player.y, player.width, player.height - 10);
+                
+                // Head
+                ctx.beginPath();
+                ctx.arc(player.x + player.width/2, player.y - 10, 15, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Hat
+                ctx.fillStyle = '#1a237e';
+                ctx.fillRect(player.x + 5, player.y - 25, player.width - 10, 15);
+                
+                // Magnifying glass
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(player.x + player.width/2 + 15, player.y - 15, 10, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.strokeRect(player.x + player.width/2 + 25, player.y - 5, 15, 2);
+            }
+            
+            // Draw evidence
+            function drawEvidence() {
+                evidence.forEach(item => {
+                    // Evidence bag
+                    ctx.fillStyle = '#ffeb3b';
+                    ctx.beginPath();
+                    ctx.moveTo(item.x, item.y + item.height/2);
+                    ctx.lineTo(item.x + item.width/2, item.y);
+                    ctx.lineTo(item.x + item.width, item.y + item.height/2);
+                    ctx.lineTo(item.x + item.width/2, item.y + item.height);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // Dollar sign
+                    ctx.fillStyle = '#000';
+                    ctx.font = 'bold 14px Arial';
+                    ctx.fillText('$', item.x + item.width/2 - 4, item.y + item.height/2 + 5);
+                });
+            }
+            
+            // Draw Vadik distractions
+            function drawVadiks() {
+                vadiks.forEach(vadik => {
+                    // Body
+                    ctx.fillStyle = '#e91e63';
+                    ctx.fillRect(vadik.x, vadik.y, vadik.width, vadik.height - 10);
+                    
+                    // Head
+                    ctx.beginPath();
+                    ctx.arc(vadik.x + vadik.width/2, vadik.y - 10, 15, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Hair
+                    ctx.fillStyle = '#ff9800';
+                    ctx.beginPath();
+                    ctx.arc(vadik.x + vadik.width/2, vadik.y - 15, 18, 0, Math.PI);
+                    ctx.fill();
+                    
+                    // Pidor smile
+                    ctx.strokeStyle = '#000';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(vadik.x + vadik.width/2, vadik.y - 5, 10, 0.1 * Math.PI, 0.9 * Math.PI);
+                    ctx.stroke();
+                });
+            }
+            
+            // Create new evidence
+            function createEvidence() {
+                const x = Math.random() * (canvas.width - evidenceSettings.width);
+                evidence.push({
+                    x: x,
+                    y: -evidenceSettings.height,
+                    width: evidenceSettings.width,
+                    height: evidenceSettings.height
+                });
+            }
+            
+            // Create new Vadik distraction
+            function createVadik() {
+                const x = Math.random() * (canvas.width - vadikSettings.width);
+                vadiks.push({
+                    x: x,
+                    y: -vadikSettings.height,
+                    width: vadikSettings.width,
+                    height: vadikSettings.height
+                });
+            }
+            
+            // Update evidence positions
+            function updateEvidence() {
+                evidence.forEach((item, index) => {
+                    item.y += evidenceSettings.speed;
+                    
+                    // Remove evidence that's off screen
+                    if (item.y > canvas.height) {
+                        evidence.splice(index, 1);
+                    }
+                    
+                    // Check for collection
+                    if (
+                        player.x < item.x + item.width &&
+                        player.x + player.width > item.x &&
+                        player.y < item.y + item.height &&
+                        player.y + player.height > item.y
+                    ) {
+                        evidence.splice(index, 1);
+                        score++;
+                        scoreElement.textContent = score;
+                    }
+                });
+            }
+            
+            // Update Vadik positions
+            function updateVadiks() {
+                vadiks.forEach((vadik, index) => {
+                    vadik.y += vadikSettings.speed;
+                    
+                    // Remove vadiks that are off screen
+                    if (vadik.y > canvas.height) {
+                        vadiks.splice(index, 1);
+                    }
+                    
+                    // Check for collision
+                    if (
+                        player.x < vadik.x + vadik.width &&
+                        player.x + player.width > vadik.x &&
+                        player.y < vadik.y + vadik.height &&
+                        player.y + player.height > vadik.y
+                    ) {
+                        gameOver = true;
+                    }
+                });
+            }
+            
+            // Update player position
+            function updatePlayer() {
+                player.x += player.dx;
+                
+                // Wall detection
+                if (player.x < 0) {
+                    player.x = 0;
+                }
+                
+                if (player.x + player.width > canvas.width) {
+                    player.x = canvas.width - player.width;
+                }
+            }
+            
+            // Clear canvas
+            function clear() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            
+            // Draw game over screen
+            function drawGameOver() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '30px Comic Neue';
+                ctx.textAlign = 'center';
+                ctx.fillText('ВАДИК ТЕБЯ ДОСТАЛ!', canvas.width / 2, canvas.height / 2 - 30);
+                
+                ctx.font = '20px Comic Neue';
+                ctx.fillText(`Собрано доказательств: ${score}`, canvas.width / 2, canvas.height / 2 + 10);
+                
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('highScore', highScore);
+                    highScoreElement.textContent = highScore;
+                    ctx.fillText('Новый рекорд!', canvas.width / 2, canvas.height / 2 + 40);
+                }
+                
+                ctx.font = '16px Comic Neue';
+                ctx.fillText('Кликни, чтобы попробовать снова', canvas.width / 2, canvas.height / 2 + 70);
+            }
+            
+            // Main game loop
+            function update() {
+                if (!gameOver) {
+                    clear();
+                    
+                    // Spawn new evidence
+                    frameCount++;
+                    if (frameCount % evidenceSettings.spawnRate === 0) {
+                        createEvidence();
+                    }
+                    
+                    // Spawn new Vadiks
+                    if (frameCount % vadikSettings.spawnRate === 0) {
+                        createVadik();
+                    }
+                    
+                    updatePlayer();
+                    updateEvidence();
+                    updateVadiks();
+                    
+                    drawPlayer();
+                    drawEvidence();
+                    drawVadiks();
+                    
+                    animationId = requestAnimationFrame(update);
+                } else {
+                    cancelAnimationFrame(animationId);
+                    drawGameOver();
+                }
+            }
+            
+            // Start new game
+            function startGame() {
+                score = 0;
+                scoreElement.textContent = score;
+                evidence = [];
+                vadiks = [];
+                gameOver = false;
+                player.x = canvas.width / 2 - 25;
+                player.dx = 0;
+                update();
+            }
+            
+            // Event listeners for controls
+            function keyDown(e) {
+                if (e.key === 'ArrowRight' || e.key === 'Right') {
+                    player.dx = player.speed;
+                } else if (e.key === 'ArrowLeft' || e.key === 'Left') {
+                    player.dx = -player.speed;
+                }
+            }
+            
+            function keyUp(e) {
+                if (
+                    e.key === 'ArrowRight' || 
+                    e.key === 'Right' || 
+                    e.key === 'ArrowLeft' || 
+                    e.key === 'Left'
+                ) {
+                    player.dx = 0;
+                }
+            }
+            
+            // Button controls
+            leftBtn.addEventListener('mousedown', () => player.dx = -player.speed);
+            leftBtn.addEventListener('mouseup', () => player.dx = 0);
+            leftBtn.addEventListener('mouseleave', () => player.dx = 0);
+            
+            rightBtn.addEventListener('mousedown', () => player.dx = player.speed);
+            rightBtn.addEventListener('mouseup', () => player.dx = 0);
+            rightBtn.addEventListener('mouseleave', () => player.dx = 0);
+            
+            // Touch controls for mobile
+            leftBtn.addEventListener('touchstart', () => player.dx = -player.speed);
+            leftBtn.addEventListener('touchend', () => player.dx = 0);
+            
+            rightBtn.addEventListener('touchstart', () => player.dx = player.speed);
+            rightBtn.addEventListener('touchend', () => player.dx = 0);
+            
+            // Restart game on click when game over
+            canvas.addEventListener('click', function() {
+                if (gameOver) {
+                    startGame();
+                }
+            });
+            
+            // Keyboard controls
+            document.addEventListener('keydown', keyDown);
+            document.addEventListener('keyup', keyUp);
+            
+            // Initialize
+            highScoreElement.textContent = highScore;
+            startGame();
+        });
+    </script>
+</body>
+</html>
